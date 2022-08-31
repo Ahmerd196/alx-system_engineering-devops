@@ -1,1 +1,1 @@
-my first shell README
+command for checking current working directory
