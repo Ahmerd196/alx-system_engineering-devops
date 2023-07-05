@@ -9,7 +9,8 @@ sudo apt-get install -y nginx
 sudo sed -i 's/^\(listen .*\)80;/\180;/' /etc/nginx/sites-available/default
 
 # Restart Nginx
-sudo /etc/init.d/nginx restart
+sudo service nginx restart
 
 # Create a custom HTML page
-sudo sh -c 'echo "Hello World!" > /var/www/html/index.html'
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
+
