@@ -3,7 +3,7 @@
 apt-get update
 
 # Install Nginx
-apt-get install -y nginx
+apt-get -y install nginx
 
 # Configure Nginx
 cat > /etc/nginx/sites-available/default << EOF
