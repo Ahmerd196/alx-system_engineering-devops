@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# This script displays information about subdomains
+
+get_subdomain_info() {
+  local domain=$1
+  local subdomain=$2
+
+  local record_types=("www" "lb-01" "web-01" "web-02")
+
+  if [[ -n $subdomain ]]; then
+    record_types=("$subdomain")
+  fi
+
+  for record_type in "${record_types[@]}"; do
+    local destination=$(dig +short "$record_type.$domain")
+    if [[ -n $destination ]]; then
+      echo "The subdomain $record_type is a $(dig +short -t "$record_type" "$record_type.$domain") record and points to $destination"
+    fi
+  done
+}
+
+get_subdomain_info "$@"
