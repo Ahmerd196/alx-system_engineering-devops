@@ -1,3 +1,15 @@
+#!/usr/bin/env bash
+# Terminating SSL on HAproxy
+
+# Install certbot
+apt-get update
+apt-get install -y certbot
+
+# Generate SSL certificate using certbot
+certbot certonly --standalone --preferred-challenges http -d www.holberton.online
+
+# Configure HAProxy
+cat > /etc/haproxy/haproxy.cfg << EOF
 global
         log /dev/log    local0
         log /dev/log    local1 notice
