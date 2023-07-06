@@ -1,34 +1,24 @@
 #!/usr/bin/env bash
-# Redirect HTTP traffic to HTTPS on HAProxy
+# Configure HAProxy to redirect HTTP to HTTPS
 
-# Configure HAProxy
+# Install HAProxy if not installed
+apt-get update
+apt-get install -y haproxy
+
+# Configure HAProxy to redirect HTTP to HTTPS
 cat > /etc/haproxy/haproxy.cfg << EOF
-global
-    daemon
-    maxconn 256
-
-defaults
-    mode http
-    timeout connect 5000ms
-    timeout client 50000ms
-    timeout server 50000ms
-
 frontend http_front
     bind *:80
-    redirect scheme https if !{ ssl_fc }
-    default_backend http_back
+    mode http
+    redirect scheme https code 301 if !{ ssl_fc }
 
 frontend https_front
     bind *:443 ssl crt /etc/ssl/certs/haproxy.pem
-    reqadd X-Forwarded-Proto:\ https
+    mode http
     default_backend http_back
 
 backend http_back
-    balance roundrobin
-    server web-01 10.0.0.1:80 check
-    server web-02 10.0.0.2:80 check
-
-backend https_back
+    mode http
     balance roundrobin
     server web-01 10.0.0.1:80 check
     server web-02 10.0.0.2:80 check
